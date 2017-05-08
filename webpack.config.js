@@ -2,19 +2,20 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = env => {
 
   const config = {
 
-    // client/source/main.js is the root level entry point referenced in index.html.
-    entry: path.join(__dirname, 'client', 'source', 'main.js'),
+    // main.js is the root level entry point referenced in index.html.
+    entry: './main.js',
 
     // All build output is put in client/build. Any asyncronously loaded
     // modules are bundled in chunks and placed there. Those chunks are
     // named with a hash.
     output: {
-      path: path.join(__dirname, 'client', 'build'),
+      path: path.resolve(__dirname, 'build'),
       filename: '[name].js',
       chunkFilename: '[chunkhash].js',
       publicPath: '/'
@@ -71,6 +72,15 @@ module.exports = env => {
       new webpack.optimize.CommonsChunkPlugin({
         children: true,
         async: true
+      }),
+
+      // Automatically generates HTML file
+      new HTMLPlugin({
+        template: './index.ejs',
+
+        options: {
+          appMountId: 'main'
+        }
       })
 
     ]

@@ -1,7 +1,3 @@
 'use struct';
 
-import { combineReducers } from 'redux';
-
-import resources from './resources';
-
-export default combineReducers({ resources });
+export default (state, action) => state;
