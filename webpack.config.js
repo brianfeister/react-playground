@@ -77,10 +77,6 @@ module.exports = env => {
       // Automatically generates HTML file
       new HTMLPlugin({
         template: './index.ejs',
-
-        options: {
-          appMountId: 'main'
-        }
       })
 
     ]
