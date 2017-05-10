@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "EXP core admin user interface",
   "main": "./main.js",
+  "engines": { "node": ">=6.0.0" },
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
     "build:production": "webpack --env=prod",
     "lint": "eslint main.js core/**/*.js",
     "precommit": "eslint main.js core/**/*.js",
-    "preinstall": "node tasks/preinstall",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
