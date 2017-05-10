@@ -1,19 +1,26 @@
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { createStore } from 'redux';
-
-import reducers from './core/reducers';
+import { AppContainer } from 'react-hot-loader';
 import App from './core/components/App';
+
+import { createStore } from 'redux';
+import reducers from './core/reducers';
 
 const store = createStore(reducers);
 
-window.onload = () => {
-  ReactDOM.render((<App store={store}></App>), document.getElementById('main'));
+const renderApp = (Component) => {
+  const element = (
+    <AppContainer>
+      <Component store={store} />
+    </AppContainer>
+  );
+  ReactDOM.render(element, document.getElementById('main'));
 };
 
+renderApp(App);
 
-
-
+// Hot Module Replacement API
+if (module.hot) {
+  module.hot.accept();
+}
