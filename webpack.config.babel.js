@@ -3,32 +3,10 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 
-/**
- * Filters out all null/undefined items from the given array.
- */
-function removeNil(as) {
-  return as.filter(a => a != null);
-}
 
-export default function (env) {
-  const isProd = env === 'prod';
-  const isDev = !isProd;
-
-  console.log(`==> Creating ${isProd ? 'an optimized' : 'a development'} bundle configuration.`);
-
-  const webpackConfig = {
-    // main.js is the root level entry point referenced in index.html.
-    entry: removeNil([
-      'regenerator-runtime/runtime',
-      // activate HMR for React
-      isDev ? 'react-hot-loader/patch' : null,
-
-      // bundle the client for webpack-dev-server
-      // and connect to the provided endpoint
-      isDev ? 'webpack-dev-server/client?http://localhost:8080' : null,
-
-      './main.js',
-    ]),
+function generateCommonConfig () {
+  return {
+    entry: ['./main.js'],
 
     // All build output is put in client/build. Any asyncronously loaded
     // modules are bundled in chunks and placed there. Those chunks are
@@ -80,7 +58,7 @@ export default function (env) {
 
     // cheap-module-source-map just maps lines to original files. For
     // development builds, this is overriden.
-    devtool: isDev ? 'inline-source-map' : 'hidden-source-map',
+    devtool: 'cheap-module-source-map',
 
     plugins: [
       // This plugin allows dependencies to be shared across bundled
@@ -100,43 +78,68 @@ export default function (env) {
     ],
   };
 
-  if (isProd) {
-    /* Webpack Options for Production */
+}
 
-    // Production builds are uglified using a source map that gives the
-    // original lines of code.
-    webpackConfig.plugins.push(
-      new webpack.optimize.UglifyJsPlugin({
-        sourceMap: 'cheap-module-source-map',
-      }),
-    );
-  } else {
-    /* Webpack Options for Development */
 
-    // Enable awesomesauce source maps. This should link to the
-    // pre-transpiled code.
-    webpackConfig.devServer = {
-      // webpackConfigure hot swap dev server. See the documentation.
-      hot: true,
-      contentBase: webpackConfig.output.path,
-      publicPath: webpackConfig.output.publicPath,
-      historyApiFallback: true,
-    };
+function developmentize (webpackConfig) {
 
-    // for webpack HMR reload, we need to always write this file to disk in dev mode
-    webpackConfig.plugins.push(
-      new HtmlWebpackHarddiskPlugin({
-        outputPath: path.resolve(__dirname, 'build'),
-      }),
-    );
+  /* Webpack Options for Development */
+  
+  // main.js is the root level entry point referenced in index.html.
+  webpackConfig.entry.push('regenerator-runtime/runtime');
 
-    // enable HMR globally
-    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+  // activate HMR for React
+  webpackConfig.entry.push('react-hot-loader/patch');
 
-    // prints more readable module names in the browser console on HMR updates
-    webpackConfig.plugins.push(new webpack.NamedModulesPlugin());
-  }
+  // bundle the client for webpack-dev-server
+  // and connect to the provided endpoint
+  webpackConfig.entry.push('webpack-dev-server/client?http://localhost:8080');
 
-  console.log('webpackConfig.entry.index', webpackConfig.entry.index);
-  return webpackConfig;
+  // Enable awesomesauce source maps. This should link to the
+  // pre-transpiled code.
+  webpackConfig.devServer = {
+    // webpackConfigure hot swap dev server. See the documentation.
+    hot: true,
+    contentBase: webpackConfig.output.path,
+    publicPath: webpackConfig.output.publicPath,
+    historyApiFallback: true,
+  };
+
+  // for webpack HMR reload, we need to always write this file to disk in dev mode
+  webpackConfig.plugins.push(
+    new HtmlWebpackHarddiskPlugin({
+      outputPath: path.resolve(__dirname, 'build'),
+    }),
+  );
+
+  // enable HMR globally
+  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+  // prints more readable module names in the browser console on HMR updates
+  webpackConfig.plugins.push(new webpack.NamedModulesPlugin());
+
+  // Slow but awesome source map for dev.
+  webpackConfig.devTool = 'inline-source-map';
+
+}
+
+function productionize (webpackConfig) {
+
+  /* Webpack Options for Production */
+
+  // Production builds are uglified using a source map that gives the
+  // original lines of code.
+  webpackConfig.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: 'cheap-module-source-map',
+    }),
+  );
+
+}
+
+
+export default function (env) {
+  global.console.log(`==> Creating ${env=='prod' ? 'an optimized' : 'a development'} bundle configuration.`);
+  if (env==='prod') return productionize(generateCommonConfig());
+  else return developmentize(generateCommonConfig());
 }

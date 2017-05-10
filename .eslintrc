@@ -4,7 +4,11 @@
   "plugins": ["react"],
   "env": {
     "browser": true,
-    "jest": true
+    "jest": true,
+    "node": true
+  },
+  "global": {
+    "__dirname": true
   },
   "parserOptions": {
 
