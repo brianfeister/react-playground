@@ -14,8 +14,8 @@ function onReadSuccess (uuid, document) {
   return { type: 'MODEL.READ.SUCCESS', uuid, document };
 }
 
-export async function read ({ uuid, type }) {
-  return (dispatch, getState) => {
+export function read ({ uuid, type }) {
+  return async (dispatch, getState) => {
     let document;
     dispatch(onReadStart(uuid));
     try {

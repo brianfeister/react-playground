@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 
 function ErrorWrapper ({ code, messaage, data, error }) {
   this.code = code || 'system.error';
@@ -10,13 +10,12 @@ function ErrorWrapper ({ code, messaage, data, error }) {
   this.serialize = () => { code, message, data, error };
 }
 
-ErrorWrapper.serialize = ()
 
 APIError.prototype = new Error();
 
 
 
-function executeAction (namespace, executor, args, dispatch, getState) {
+async function executeAction (namespace, executor, args, dispatch, getState) {
   try {
     await dispatch({ type: `${ namespace }.START`, args });
     const result = await executor(state, ...args);
@@ -44,7 +43,7 @@ function serializeError (error) {
   }
 }
 
-function fetchWrapper (request) {
+async function fetchWrapper (request) {
   let response;
   try {
     response = await fetch(request);
@@ -79,8 +78,8 @@ function fetchWrapper (request) {
       const body = await response.json();
       error.code = body.code || error.code;
       error.text = body.message || error.text;
-    } catch (error) { /* Unexpected */ }
-  }
+    } catch (error) { /* Unexpected */
+/*  }
 
   throw error;
 
@@ -97,6 +96,7 @@ export const login = createAsyncAction('LOGIN', async (state, username, password
 
 
 
-export function login () {}
+//export function login () {}
 export function logout () {}
 export function refresh () {}
+*/

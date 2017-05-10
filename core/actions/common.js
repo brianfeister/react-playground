@@ -1,7 +1,7 @@
 'use strict';
 
 
-
+/*
 function StandardError ({ name, code, messaage, error }) {
   this.name = name || 'Error';
   this.code = code || 'system.error';
@@ -9,12 +9,12 @@ function StandardError ({ name, code, messaage, error }) {
   this.stack = error ? error.stack : (new Error()).stack;
   this.serialize = () => ({
     name: this.name,
-    code: this.code
-    message: this.message,
+    code: this.code,
+    message: this.message
 
-  }
-    { code, message, data, error };
-  }
+  })
+//    { code, message, data, error };
+//  }
 }
 
 
@@ -23,7 +23,7 @@ APIError.prototype = new Error();
 
 
 
-function executeAction (namespace, executor, args, dispatch, getState) {
+async function executeAction (namespace, executor, args, dispatch, getState) {
   try {
     await dispatch({ type: `${ namespace }.START`, args });
     const result = await executor(state, ...args);
@@ -54,9 +54,9 @@ function serializeError (error) {
 
 
 function fetchWrapper (request) {
-
+*/
   /* Obtain the REsponse */
-  let response;
+/*  let response;
   try {
     response = await fetch(request);
   } catch (error) {
@@ -93,7 +93,7 @@ function fetchWrapper (request) {
       const body = await response.json();
       error.code = body.code || error.code;
       error.text = body.message || error.text;
-    } catch (error) { /* Unexpected */ }
+    } catch (error) { /* Unexpected */ /*}
   }
 
   throw error;
@@ -114,3 +114,4 @@ export const login = createAsyncAction('LOGIN', async (state, username, password
 export function login () {}
 export function logout () {}
 export function refresh () {}
+*/

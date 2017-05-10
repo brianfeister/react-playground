@@ -85,11 +85,8 @@ function developmentize (webpackConfig) {
 
   /* Webpack Options for Development */
   
-  // main.js is the root level entry point referenced in index.html.
-  webpackConfig.entry.push('regenerator-runtime/runtime');
-
   // activate HMR for React
-  webpackConfig.entry.push('react-hot-loader/patch');
+  webpackConfig.entry.unshift('react-hot-loader/patch');
 
   // bundle the client for webpack-dev-server
   // and connect to the provided endpoint
@@ -119,8 +116,9 @@ function developmentize (webpackConfig) {
   webpackConfig.plugins.push(new webpack.NamedModulesPlugin());
 
   // Slow but awesome source map for dev.
-  webpackConfig.devTool = 'inline-source-map';
+  webpackConfig.devtool = 'inline-source-map';
 
+  return webpackConfig;
 }
 
 function productionize (webpackConfig) {
@@ -134,6 +132,8 @@ function productionize (webpackConfig) {
       sourceMap: 'cheap-module-source-map',
     }),
   );
+
+  return webpackConfig;
 
 }
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Helmet } from 'react-helmet';
 
 // AppContainer is simply passthrough in production.
 import { AppContainer } from 'react-hot-loader';
@@ -11,15 +10,11 @@ import reducers from './core/reducers';
 
 const store = createStore(reducers);
 
-const element = (
+ReactDOM.render((
   <AppContainer>
-    <div>Test</div>
-
     <App store={store} />
   </AppContainer>
-);
-
-ReactDOM.render(element, document.getElementById('main'));
+), document.getElementById('main'));
 
 // Hot Module Replacement API
 if (module.hot) module.hot.accept();
