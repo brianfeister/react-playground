@@ -1,15 +1,34 @@
-'use strict';
+import webpack from 'webpack';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 
-const webpack = require('webpack');
-const path = require('path');
-const HTMLPlugin = require('html-webpack-plugin');
+/**
+ * Filters out all null/undefined items from the given array.
+ */
+function removeNil(as) {
+  return as.filter(a => a != null);
+}
 
-module.exports = env => {
+export default function (env) {
+  const isProd = env === 'prod';
+  const isDev = !isProd;
 
-  const config = {
+  console.log(`==> Creating ${isProd ? 'an optimized' : 'a development'} bundle configuration.`);
 
+  const webpackConfig = {
     // main.js is the root level entry point referenced in index.html.
-    entry: './main.js',
+    entry: removeNil([
+      'regenerator-runtime/runtime',
+      // activate HMR for React
+      isDev ? 'react-hot-loader/patch' : null,
+
+      // bundle the client for webpack-dev-server
+      // and connect to the provided endpoint
+      isDev ? 'webpack-dev-server/client?http://localhost:8080' : null,
+
+      './main.js',
+    ]),
 
     // All build output is put in client/build. Any asyncronously loaded
     // modules are bundled in chunks and placed there. Those chunks are
@@ -18,12 +37,11 @@ module.exports = env => {
       path: path.resolve(__dirname, 'build'),
       filename: '[name].js',
       chunkFilename: '[chunkhash].js',
-      publicPath: '/'
+      publicPath: '/',
     },
 
     module: {
       rules: [
-
         // Javascript files are run through es2015 and react
         // transpiling. This matches all .js files in the project and
         // pipes them into babel.
@@ -35,7 +53,7 @@ module.exports = env => {
 
         // There were recent changes to the es2015 plugin that now
         // doesn't transpile es6 import by default. You may see an
-        // additional configuration option is some non-current examples that tells
+        // additional webpackConfiguration option is some non-current examples that tells
         // babel to leave them in place.
 
         // The "syntax-dynamic-import" plugin stops babel from throwing
@@ -51,70 +69,74 @@ module.exports = env => {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
+          // loader: 'happypack/loader?id=happypack-javascript',
           options: {
             presets: ['es2015', 'react'],
-            plugins: ['syntax-dynamic-import']
-          }
-        }
-      ]
+            plugins: ['syntax-dynamic-import'],
+          },
+        },
+      ],
     },
 
     // cheap-module-source-map just maps lines to original files. For
     // development builds, this is overriden.
-    devtool: 'cheap-module-source-map',
+    devtool: isDev ? 'inline-source-map' : 'hidden-source-map',
 
     plugins: [
-
       // This plugin allows dependencies to be shared across bundled
       // chunks. The options tell the plugin that async-loaded modules
       // should be included (using the import()) syntax and that all
       // children of the entry point are to be considered.
       new webpack.optimize.CommonsChunkPlugin({
         children: true,
-        async: true
+        async: true,
       }),
 
       // Automatically generates HTML file
-      new HTMLPlugin({
+      new HtmlWebpackPlugin({
         template: './index.ejs',
-      })
-
-    ]
+        alwaysWriteToDisk: true,
+      }),
+    ],
   };
 
-
-
-
-  if (env === 'prod') {
-
+  if (isProd) {
     /* Webpack Options for Production */
 
     // Production builds are uglified using a source map that gives the
     // original lines of code.
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-      sourceMap: 'cheap-module-source-map'
-    }));
-
+    webpackConfig.plugins.push(
+      new webpack.optimize.UglifyJsPlugin({
+        sourceMap: 'cheap-module-source-map',
+      }),
+    );
   } else {
-
     /* Webpack Options for Development */
 
     // Enable awesomesauce source maps. This should link to the
     // pre-transpiled code.
-    config.devtool = 'inline-source-map',
-
-    // Configure hot swap dev server. See the documentation.
-    config.devServer = {
+    webpackConfig.devServer = {
+      // webpackConfigure hot swap dev server. See the documentation.
       hot: true,
-      contentBase: config.output.path,
-      publicPath: config.output.publicPath
+      contentBase: webpackConfig.output.path,
+      publicPath: webpackConfig.output.publicPath,
+      historyApiFallback: true,
     };
 
-    // Enable ability to hotswap modules when changes occur.
-    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    // for webpack HMR reload, we need to always write this file to disk in dev mode
+    webpackConfig.plugins.push(
+      new HtmlWebpackHarddiskPlugin({
+        outputPath: path.resolve(__dirname, 'build'),
+      }),
+    );
 
+    // enable HMR globally
+    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+    // prints more readable module names in the browser console on HMR updates
+    webpackConfig.plugins.push(new webpack.NamedModulesPlugin());
   }
 
-  return config;
-
-};
+  console.log('webpackConfig.entry.index', webpackConfig.entry.index);
+  return webpackConfig;
+}

@@ -1,0 +1,13 @@
+// We use the .babelrc here to help transpile our tools and support tooling
+// (such as testing libs)
+{
+  "presets": [
+    "airbnb",
+    ["es2015", {"modules": false}],
+    "react",
+    "stage-3"
+  ],
+  "plugins": [
+    "react-hot-loader/babel"
+  ]
+}
