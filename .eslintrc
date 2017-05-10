@@ -1,23 +1,40 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "plugins": ["react"],
   "env": {
     "browser": true,
-    "es6": true,
-    "node": true,
     "jest": true
   },
-  "ecmaFeatures": {
-    "defaultParams": true
+  "parserOptions": {
+
+    // This is the same as v8
+    "ecmaVersion": "2017",
+
+    "ecmaFeatures": {
+
+      // Enable react dom elements.
+      "jsx": true,
+
+      // Allows common redux object spread. Currently stage 3.
+      "experimentalObjectRestSpread": true
+    }
   },
   "rules": {
+
     // A jsx extension is not required for files containing jsx
     "react/jsx-filename-extension": 0,
+
     // This rule struggles with flow and class properties
     "react/sort-comp": 0,
+
+    // Remove mandatory display name for react components.
+    "react/display-name": 0,
+
     // ignore linebreak style. the CRLF / LF endings wont matter
     // if a windows user correctly converts CRLF to LF upon commits otherwise
     // there are errors every line.
     "linebreak-style": 0
+
   }
 }

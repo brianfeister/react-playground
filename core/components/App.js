@@ -1,6 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-
 import OtherComponent from './OtherComponent';
 import OtherComponent2 from './OtherComponent2';
 
