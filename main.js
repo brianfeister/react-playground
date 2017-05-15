@@ -1,18 +1,27 @@
+'use strict';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// AppContainer is simply passthrough in production.
-import { AppContainer } from 'react-hot-loader';
-import App from './core/components/App';
-
 import { createStore } from 'redux';
-import reducers from './core/reducers';
+import { AppContainer } from 'react-hot-loader'; // AppContainer is simply passthrough in production.
+
+import App from 'core/App';
+import reducers from 'reducers';
+
 
 const store = createStore(reducers);
+import { Provider } from 'react-redux';
+
+import Theme from 'material-ui/styles/MuiThemeProvider';
 
 ReactDOM.render((
   <AppContainer>
-    <App store={store} />
+    <Provider store={store}>
+      <Theme>
+        <App/>
+      </Theme>
+    </Provider>
   </AppContainer>
 ), document.getElementById('main'));
 

@@ -18,6 +18,16 @@ function generateCommonConfig () {
       publicPath: '/',
     },
 
+    resolve: {
+      alias: {
+        common: path.resolve(__dirname, 'common'),
+        core: path.resolve(__dirname, 'core'),
+        actions: path.resolve(__dirname, 'actions'),
+        reducers: path.resolve(__dirname, 'reducers'),
+        components: path.resolve(__dirname, 'components')
+      }
+    },
+
     module: {
       rules: [
         // Javascript files are run through es2015 and react

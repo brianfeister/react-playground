@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "EXP core admin user interface",
   "main": "./main.js",
-  "engines": { "node": ">=6.0.0" },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
@@ -27,6 +29,7 @@
   "author": "Father Time <brian@drm.st>",
   "license": "N/A",
   "dependencies": {
+    "material-ui": "^1.0.0-alpha.13",
     "prop-types": "~15.5.8",
     "react": "15.5.4",
     "react-dom": "15.5.4",
