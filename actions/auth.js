@@ -3,14 +3,17 @@
 import * as apifetch_ from 'common/fetch';
 import { sign } from 'common/auth';
 
-export const login = createAsyncAction('AUTH.LOGIN', async (state, formName, options) => {
 
-  const selector = {};
-  selector(state, 'username');
-  selector(state, 'blah');
-  selector(state, 'blah');
 
-  const { username, password, organization } = state.auth.credentials;
+// state, formName
+
+// form
+// (manifest)
+// (fields)
+
+
+
+export const login = createAsyncAction('AUTH.LOGIN', async (dispatch, getState, username, password) => {
 
   const headers = new Headers();
   headers.set('Content-Type', 'application/json');

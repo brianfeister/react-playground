@@ -5,8 +5,26 @@ import Input from 'material-ui/Input';
 import InputLabel from 'material-ui/Input/InputLabel';
 import FormControl from 'material-ui/Form/FormControl';
 
+import Dynamic from 'components/Dynamic';
 
+const config = {
+  items: [
+    {
+      type: 'input',
+      label: 'Test'
+    },
+    {
+      type: 'googlamesh'
+    }
 
+  ]
+};
+
+export default () => {
+  return (<Dynamic config={config}></Dynamic>)
+}
+
+/*
 export default ({ isLoggedIn, onPropertyChange }) => {
   if (isLoggedIn) {
     return (<div>Logged IN</div>)
@@ -39,3 +57,4 @@ export default ({ isLoggedIn, onPropertyChange }) => {
 
   }
 };
+*/
