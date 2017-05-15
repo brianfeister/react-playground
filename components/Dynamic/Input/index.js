@@ -2,9 +2,13 @@
 
 import React from 'react';
 
-export default ({ label }) => (
+export default ({ key, type, config, state }) => (
   <div>
-    <label>{ label }</label>
-    <input type="text"></input>
+    <div>
+      <label>{ config.label }</label>
+    </div>
+    <div>
+      <input type="text"></input>
+    </div>
   </div>
 );

@@ -8,12 +8,16 @@ import FormControl from 'material-ui/Form/FormControl';
 import Dynamic from 'components/Dynamic';
 
 const config = {
-  items: [
+  children: [
     {
+      key: 'username',
       type: 'input',
-      label: 'Test'
+      config: {
+        label: 'Test'
+      }
     },
     {
+      key: 'password',
       type: 'googlamesh'
     }
 
