@@ -6,7 +6,11 @@ import Form from 'exp/components/Form';
 
 import { connect } from 'react-redux';
 
-const Login = () => (
+const Login = connect(() => {
+}, () => {
+
+
+})(() => (
   <Form name="login">
     <Input name="username" label="Username"/>
     <Input name="password" label="Password"/>
