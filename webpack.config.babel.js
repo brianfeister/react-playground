@@ -20,6 +20,7 @@ function generateCommonConfig () {
 
     resolve: {
       alias: {
+        exp: path.resolve(__dirname),
         common: path.resolve(__dirname, 'common'),
         core: path.resolve(__dirname, 'core'),
         actions: path.resolve(__dirname, 'actions'),
@@ -60,7 +61,7 @@ function generateCommonConfig () {
           // loader: 'happypack/loader?id=happypack-javascript',
           options: {
             presets: ['es2015', 'react'],
-            plugins: ['syntax-dynamic-import'],
+            plugins: ['syntax-dynamic-import', 'transform-object-rest-spread'],
           },
         },
       ],

@@ -2,25 +2,26 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { createStore } from 'redux';
 import { AppContainer } from 'react-hot-loader'; // AppContainer is simply passthrough in production.
-
-import App from 'core/App';
-import reducers from 'reducers';
-
-
-const store = createStore(reducers);
 import { Provider } from 'react-redux';
 
-import Theme from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider } from 'material-ui/styles';
+
+import App from 'exp/core/App';
+import reducers from 'exp/reducers';
+
+const store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+
+
 
 ReactDOM.render((
   <AppContainer>
     <Provider store={store}>
-      <Theme>
+      <MuiThemeProvider>
         <App/>
-      </Theme>
+      </MuiThemeProvider>
     </Provider>
   </AppContainer>
 ), document.getElementById('main'));

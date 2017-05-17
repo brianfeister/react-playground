@@ -1,13 +1,33 @@
 import React from 'react';
 
 
-import Login from './Login';
+import Dynamic from 'exp/common/Dynamic';
 
-import OtherComponent from './OtherComponent';
-import OtherComponent2 from './OtherComponent2';
+const config = {
+  type: 'Array',
+  options: {
+    children: [
+      {
+        type: 'Input',
+        options: {
+          key: 'login.username',
+          label: 'Username'
+        }
+      },
+      {
+        type: 'Input',
+        options: {
+          key: 'login.password',
+          label: 'Password'
+        }
+      }
+    ]
+  }
+};
+
 
 export default () => (
   <div>
-    <Login test="1"></Login>
+    <Dynamic form="test1" config={config}/>
   </div>
 );
