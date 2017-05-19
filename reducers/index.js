@@ -5,5 +5,5 @@ import { reducer as formReducer } from 'redux-form';
 
 export default combineReducers({
   form: formReducer,
-  auth: () => { return { document: { } }; }
+  auth: () => { return { document: null }; }
 });

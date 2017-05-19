@@ -60,8 +60,8 @@ function generateCommonConfig () {
           loader: 'babel-loader',
           // loader: 'happypack/loader?id=happypack-javascript',
           options: {
-            presets: ['es2015', 'react'],
-            plugins: ['syntax-dynamic-import', 'transform-object-rest-spread'],
+            presets: ['es2015', 'es2016', 'es2017', 'react'],
+            plugins: ['syntax-dynamic-import', 'transform-object-rest-spread', 'transform-class-properties'],
           },
         },
       ],
