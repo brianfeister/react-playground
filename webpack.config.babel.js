@@ -2,6 +2,7 @@ import webpack from 'webpack';
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
+import WebpackMd5Hash from 'webpack-md5-hash';
 
 /**
  * Filters out all null/undefined items from the given array.
@@ -36,7 +37,7 @@ export default function (env) {
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: '[name].js',
-      chunkFilename: '[chunkhash].js',
+      chunkFilename: '[name].js',
       publicPath: '/',
     },
 
@@ -102,6 +103,18 @@ export default function (env) {
 
   if (isProd) {
     /* Webpack Options for Production */
+    webpackConfig.output = {
+      path: path.resolve(__dirname, 'build'),
+      // For our production client bundles we include a hash in the filename.
+      // That way we won't hit any browser caching issues when our bundle
+      // output changes.
+      // Note: as we are using the WebpackMd5Hash plugin, the hashes will
+      // only change when the file contents change. This means we can
+      // set very aggressive caching strategies on our bundle output.
+      filename: '[name]-[chunkhash].js',
+      chunkFilename: '[name]-[chunkhash].js',
+      publicPath: '/',
+    };
 
     // Production builds are uglified using a source map that gives the
     // original lines of code.
@@ -109,6 +122,7 @@ export default function (env) {
       new webpack.optimize.UglifyJsPlugin({
         sourceMap: 'cheap-module-source-map',
       }),
+      new WebpackMd5Hash(),
     );
   } else {
     /* Webpack Options for Development */
