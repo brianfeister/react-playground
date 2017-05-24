@@ -4,8 +4,9 @@ import React from 'react';
 import { Button } from 'material-ui';
 
 import Demo0 from 'exp/demos/no-state';
+import Demo1 from 'exp/demos/homegrown/test';
 
-const demos = [(<Demo0/>),(<div>Bye</div>)];
+const demos = [(<Demo0/>),(<Demo1/>)];
 
 
 export default class Portal extends React.Component {

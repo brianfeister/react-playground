@@ -61,7 +61,12 @@ function generateCommonConfig () {
           // loader: 'happypack/loader?id=happypack-javascript',
           options: {
             presets: ['es2015', 'es2016', 'es2017', 'react'],
-            plugins: ['syntax-dynamic-import', 'transform-object-rest-spread', 'transform-class-properties'],
+            plugins: [
+              'syntax-dynamic-import',
+              'transform-object-rest-spread',
+              'transform-class-properties',
+              'transform-decorators'
+            ],
           },
         },
       ],
