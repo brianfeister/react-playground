@@ -1,26 +1,36 @@
-import React from 'react';
+'use strict';
+
+import React_ from 'react';
+window.React = React_;
+
 import ReactDOM from 'react-dom';
 
-import { AppContainer } from 'react-hot-loader';
-import App from './core/components/App';
-
 import { createStore } from 'redux';
-import reducers from './core/reducers';
+import { AppContainer } from 'react-hot-loader'; // AppContainer is simply passthrough in production.
+import { Provider } from 'react-redux';
 
-const store = createStore(reducers);
+import { MuiThemeProvider } from 'material-ui/styles';
 
-const renderApp = (Component) => {
-  const element = (
-    <AppContainer>
-      <Component store={store} />
-    </AppContainer>
-  );
-  ReactDOM.render(element, document.getElementById('main'));
-};
+import Application from 'exp/components/core/Application';
+import reducers from 'exp/reducers';
 
-renderApp(App);
+const store = createStore(
+  reducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
+
+
+
+ReactDOM.render((
+  <AppContainer>
+    <Provider store={store}>
+      <MuiThemeProvider>
+        <Application/>
+      </MuiThemeProvider>
+    </Provider>
+  </AppContainer>
+), document.getElementById('main'));
 
 // Hot Module Replacement API
-if (module.hot) {
-  module.hot.accept();
-}
+if (module.hot) module.hot.accept();
