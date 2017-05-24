@@ -42,19 +42,6 @@ export const withPaths = (...options) => method => ({
 });
 
 
-export const set = withPaths({ key: 'path', prefixes: ['value', 'metadata']})(({
-  paths: [[valuePath, metdataPath]],
-  value,
-  metadata
-}) => ({
-  type: ACTION_TYPES.SET,
-  operations: [
-    value && { path: valuePath, value: value },
-    metadata && { path: metadataPath, value: metadata }
-  ].filter(x => x)
-}));
-
-
 export const merge = withPaths({ key: 'path', prefixes: ['value', 'metadata']})(({
   paths: [[valuePath, metdataPath]],
   value,
@@ -62,8 +49,8 @@ export const merge = withPaths({ key: 'path', prefixes: ['value', 'metadata']})(
 }) => ({
   type: ACTION_TYPES.MERGE,
   operations: [
-    value && [valuePath, value],
-    metadata && [metadataPath, metadata]
+    value !== undefined && [valuePath, value],
+    metadata !== undefined && [metadataPath, metadata]
   ].filter(x => x)
 }));
 

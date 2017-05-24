@@ -23,7 +23,12 @@ export default connect((state, { namespace }) => ({
 }))(({ text1, text2, prepit, swapit }) => {
   return (
     <div>
+      <div><button onClick={add}>ADD</button></div>
+
+
       <div onClick={prepit}>{text1}</div>
+      <div><button onClick={add}>ADD</button></div>
+
       <div onClick={swapit}>{text2}</div>
     </div>
   );
