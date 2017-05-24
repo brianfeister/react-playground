@@ -15,7 +15,7 @@ function generateCommonConfig () {
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: '[name].js',
-      chunkFilename: '[name].js',
+      chunkFilename: '[chunkhash].js',
       publicPath: '/',
     },
 

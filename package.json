@@ -10,13 +10,13 @@
     "start": "webpack-dev-server",
     "build": "webpack",
     "build:production": "webpack --env=prod",
-    "lint": "eslint main.js core/**/*.js",
+    "lint": "eslint main.js core/**/*.js !demos/**/*",
     "precommit": "lint-staged",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
   "lint-staged": {
-    "main.js core/**/*.js": [
+    "main.js core/**/*.js !demos/**/*": [
       "eslint",
       "git add"
     ]
