@@ -16,7 +16,7 @@
     "test:coverage": "jest --coverage"
   },
   "lint-staged": {
-    "core/**/*.js": [
+    "main.js core/**/*.js": [
       "eslint",
       "git add"
     ]
