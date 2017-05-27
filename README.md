@@ -22,107 +22,66 @@ yarn install
 npm start
 ```
 
-Context
 
-containerType
-(ui, form, null)
+# Directory Structure
 
-
-
-
-(form, presentational, naked -> Field)
-
-
-(form, dynamic, container, naked)
+**src/actions** - Dispatchable actions (including thunks and thunk logic).
+**src/components** - React components.
+**src/connectors** - HOCs that connect a component to the store.
+**src/selectors** - Selectors to slice the store and memoize it.
+**src/store** - The redux store.
 
 
-Dynamic -> Presentational
-
-
-
-
-
-
-# Presentational Components presentational
-
-These are reusable components that are hooked up to material UI and
-are purely presentational. They generally should NOT wrap container or
-dynamic components as they do not have the context to do so.
-
-
-# Connected Components: containers
-
-These are reusable components that are bound to the redux store with
-redux middleware or wrapped redux-form middleware. They typically wrap presentational
-components.
-
-
-
-# Field Componenents: fields
-
-
-These are components that track user entry, which is bound into the
-redux store via redux-form. They typically wrap presentational
-components and must have a Form entry point as a parent.
-
-
-# Dynamic Components: dynamic
-
-These components are used to drive dynamic UI. All take {options} as
-props. Dynamic components are generally wrapped field components.
-
-
-# Core components: core
-
-These components are the core components that power the UI.
-
-
-# Utilitys: utils
-
-These are higher order components or general utilities for components.
-
+# Style Guide
 
 
 # Actions
-actions.auth.login()
-actions.auth.refresh()
-actions.auth.logout();
-actions.devices.create(document);
-actions.devices.read(uuid)
-actions.devices.update(uuid, document)
-actions.devices.delete(uuid);
-actions.activities.activate(uuid);
 
 
-# State
+# Redux and State
 
-## Resource Schema
+## High Level
+
+The general approach to state binding is to build components with
+standard connect middleware using specialized bundles of selectors and
+actions creators.
+
+For example (syntax TBD):
+
+```javascript
+'use strict';
+
+import { connect } from 'react-redux';
+import { reselect } from 'reselect';
+
+import { fieldValueSelector } from 'selectors/forms';
+import { fieldMetadataSelector } from 'selectors/forms';
+
+export default connect((state, { formName, fieldName }) => {
+  return {
+    value: fieldValueSelector({ formName, fieldName }),
+    metadata: fieldMetadataSelect({ formName, fieldName })
+  }
+}, (dispatch, { formName }) => {
+  return {
+    onChange: value => fieldActions.setValue({ formName, fieldName, value })
+  };
+})(({ value, onChange }) => (<input value={value} onChange={onChange}>))
+
 
 ```
-{
-  status: { busy: Boolean, deleted: Boolean }
-  document: {}
-}
-```
-  
-## Resource Namespaces
-
-state.resources.auth
-state.resources.devices
-state.resources.activities
-state.resources.experiences
 
 
 
-# Reducers
+## Low Level
 
+### Store Setup and the Generic Action Type
 
-## exp/actions/auth
-## exp/actions/resource
+There is a single reducer and action type, the "generic" action type. All actions that are dispatched to the reducer (non IOC/non thunk actions) are of this type. The generic action type is a list of low-level "operations" to be performed on the store. These operations are as follows:
 
+**set** - Set a value at a path.
+**merge** - Merge in a value at a path.
+**swap** - Swap the value of two paths.
+**splice** - Perform a splice operation (standard javascript splice) on an array at a path.
 
-
-
-
-
-
+Action creators generate a list of operations. For example, a form field "changeValue" action might set the value of the form field and set the field metadata to dirty.

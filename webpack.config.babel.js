@@ -20,12 +20,13 @@ function generateCommonConfig () {
 
     resolve: {
       alias: {
-        exp: path.resolve(__dirname),
-        common: path.resolve(__dirname, 'common'),
-        core: path.resolve(__dirname, 'core'),
-        actions: path.resolve(__dirname, 'actions'),
-        reducers: path.resolve(__dirname, 'reducers'),
-        components: path.resolve(__dirname, 'components')
+        actions: path.resolve(__dirname, 'src', 'actions'),
+        components: path.resolve(__dirname, 'src', 'components'),
+        connectors: path.resolve(__dirname, 'src', 'connectors'),
+        lib: path.resolve(__dirname, 'src', 'lib'),
+        reducers: path.resolve(__dirname, 'src', 'reducers'),
+        selectors: path.resolve(__dirname, 'src', 'selectors'),
+        store: path.resolve(__dirname, 'src', 'store')
       }
     },
 
@@ -64,8 +65,7 @@ function generateCommonConfig () {
             plugins: [
               'syntax-dynamic-import',
               'transform-object-rest-spread',
-              'transform-class-properties',
-              'transform-decorators'
+              'transform-class-properties'
             ],
           },
         },
