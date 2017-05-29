@@ -6,7 +6,7 @@ import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 
 function generateCommonConfig () {
   return {
-    entry: ['./main.js'],
+    entry: ['./src/main.js'],
 
     // All build output is put in client/build. Any asyncronously loaded
     // modules are bundled in chunks and placed there. Those chunks are
@@ -20,13 +20,10 @@ function generateCommonConfig () {
 
     resolve: {
       alias: {
-        actions: path.resolve(__dirname, 'src', 'actions'),
-        components: path.resolve(__dirname, 'src', 'components'),
-        connectors: path.resolve(__dirname, 'src', 'connectors'),
-        lib: path.resolve(__dirname, 'src', 'lib'),
-        reducers: path.resolve(__dirname, 'src', 'reducers'),
-        selectors: path.resolve(__dirname, 'src', 'selectors'),
-        store: path.resolve(__dirname, 'src', 'store')
+        activities: path.resolve(__dirname, 'src', 'activities'),
+        App: path.resolve(__dirname, 'src', 'App'),
+        common: path.resolve(__dirname, 'src', 'common'),
+        lib: path.resolve(__dirname, 'src', 'lib')
       }
     },
 
@@ -88,7 +85,7 @@ function generateCommonConfig () {
 
       // Automatically generates HTML file
       new HtmlWebpackPlugin({
-        template: './index.ejs',
+        template: './src/index.ejs',
         alwaysWriteToDisk: true,
       }),
     ],
@@ -100,7 +97,7 @@ function generateCommonConfig () {
 function developmentize (webpackConfig) {
 
   /* Webpack Options for Development */
-  
+
   // activate HMR for React
   webpackConfig.entry.unshift('react-hot-loader/patch');
 

@@ -1,84 +1,96 @@
 'use strict';
 
 import { BaseError } from 'lib/errors';
-import { WrappingError } from 'lib/errors';
 
 
-class HttpNetworkError extends BaseError {
-  constructor (error) {
-    const message = 'Cannot connect to the internet or EXP.';
-    const code = 'http.network';
-    const metadata = { error };
-    super(message, code, metadat);
-  }
-}
-
-class HttpStatusError extends BaseError {
-  constructor (request, response) {
-    const message = 'An error occurred fulfilling the request.';
-    const code = `http.status`;
-    const metadata = { request, response };
-    super(message, code, metadata);
+export class HttpError extends BaseError {
+  constructor ({ code, ...pass }) {
+    super({ code: `http.${code}`, ...pass });
   }
 }
 
 
-class HttpParseError extends BaseError {
-  constructor (request, response, error) {
-    const message = 'Failed to parse response.';
-    const code = 'http.parse';
-    const metadata = { request, response, error };
-    super(message, code, metadata, error.stack);
+export class NetworkError extends HttpError {
+  constructor ({ error, ...pass }) {
+    super({
+      message: 'Cannot connect to the internet or EXP.',
+      code: 'network',
+      metadata: { error, ...pass },
+      stack: error.stack
+    });
   }
 }
 
 
-class HttpStatusJsonError extends BaseError {
-  constructor (request, response, document) {
-    const message = 'An error occurred fulfilling the request.';
-    const code = 'http.status.json';
-    const metadata = { request, response, document };
-    super(message, code, metadata);
+export class StatusError extends HttpError {
+  constructor ({ response, ...pass }) {
+    super({
+      message: 'An error occurred fulfilling the request.',
+      code: `status.${response.status}`,
+      metadata: { response, ...pass }
+    });
   }
 }
 
 
-class HttpContentTypeError extends BaseError {
-  constructor (request, response) {
-    const message = 'Received unexpected content type.';
-    const code = 'http.contentType';
-    const metadata = { request, response };
-    super(message, code, metadata);
+export class ParseError extends HttpError {
+  constructor ({ error, ...pass }) {
+    super({
+      message: 'Failed to parse response.',
+      code: 'parse',
+      metadata: { error, ...pass },
+      stack: error.stack
+    })
   }
 }
 
 
-function fetch_ (request) {
-  return fetch(request).catch(error => {
-    throw new HttpNetworkError(error);
-  });
-}
 
 
-async function json_ (request) {
-  const response = await fetch_(request);
-  if (response.headers.get('content-type') !== 'application/json') {
-    if (response.ok) throw new HttpContentTypeError()
-    throw new HttpStatusError(request, response);
-  }
+
+
+/* Decorators */
+
+export const trap = () => method => async (...args) => {
+  const { response, ...pass } = await method(...args);
+  if (!response.ok) throw new StatusError({ response, ...pass });
+  return { response, ...pass };
+};
+
+
+export const parse = () => method => async (...args) => {
+  const { response, ...pass } = await method(...args);
   const document = await response.json().catch(error => {
-    throw new HttpParseError(request, response, error);
+    throw new ParseError({ response, error, ...pass });
   });
-  if (!response.ok) throw new HttpStatusJsonError(request, response, document);
-  return document;
-}
+  return { response, document, ...pass };
+};
 
 
-export { HttpNetworkError }
-export { HttpParseError }
-export { HttpStatusError }
-export { HttpContentTypeError }
-export { HttpStatusJsonError }
+export const withJsonBody = document => method => request => {
+  const clone = request.clone();
+  clone.headers.set('content-type', 'application/json');
+  return method(new Request(clone.url, {
+    method: clone.method,
+    headers: clone.headers,
+    body: JSON.stringify(document),
+    mode: clone.mode,
+    credentials: clone.credentials,
+    cache: clone.cache,
+    redirect: clone.redirect,
+    referrer: clone.referrer,
+    integrity: clone.integrity
+  }));
+};
 
-export { fetch_ as fetch }
-export { json_ as json }
+
+
+
+/* Fetch */
+
+export const send = async (request) => {
+  const response = await fetch(request).catch(error => {
+    throw new NetworkError({ request, error });
+  });
+  return { request, response };
+};
