@@ -22,8 +22,9 @@ function generateCommonConfig () {
       alias: {
         activities: path.resolve(__dirname, 'src', 'activities'),
         App: path.resolve(__dirname, 'src', 'App'),
-        common: path.resolve(__dirname, 'src', 'common'),
-        lib: path.resolve(__dirname, 'src', 'lib')
+        components: path.resolve(__dirname, 'src', 'components'),
+        lib: path.resolve(__dirname, 'src', 'lib'),
+        state: path.resolve(__dirname, 'src', 'state'),
       }
     },
 

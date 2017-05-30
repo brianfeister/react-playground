@@ -2,16 +2,55 @@
 
 import { connect } from 'react-redux';
 
-import { createLoginSubmitter } from 'common/forms/actions/auth';
-import { getMetadata } from 'common/forms/selectors';
+//import { createLoginSubmitter } from 'common/forms/actions/auth';
+//import { getMetadata } from 'common/forms/selectors';
 
-import { getErrorMessage } from 'common/forms/selectors';
+//import { getErrorMessage } from 'common/forms/selectors';
 
-import { getFieldValue } from 'common/forms/selectors';
-import { updateField } from 'common/forms/actions';
+//import { getFieldValue } from 'common/forms/selectors';
+//import { updateField } from 'common/forms/actions';
 
-const name = 'LOGIN_FORM';
-const submit = createLoginSubmitter(name);
+import { submit } from 'state/forms';
+import { login } from 'state/auth';
+
+
+
+import TextField from 'components/forms/TextField';
+import FormError from 'components/forms/FormError';
+
+import Button from 'material-ui/Button';
+
+
+
+
+const onSubmit = () => submit('login', ({ getValue }) => (dispatch, getState) =>  {
+  return dispatch(login(getValue(getState())));
+});
+
+
+
+
+export default connect(
+  () => ({}),
+  dispatch => ({
+    submit: () => dispatch(onSubmit())
+  })
+)
+(({ submit }) => (
+    <div>
+      <TextField label="Username" form="login" field="username"/>
+      <TextField label="Password" form="login" field="password"/>
+      <FormError form="login"></FormError>
+      <Button raised primary onClick={submit}>Login</Button>
+    </div>
+  )
+);
+
+/*
+
+
+
+
 
 export default connect(
   (state, props) => {
@@ -49,3 +88,4 @@ export default connect(
     <button onClick={submit}>Login</button>
   </div>
 ));
+*/

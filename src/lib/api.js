@@ -1,7 +1,5 @@
 'use strict';
 
-import { compose } from 'redux';
-
 import * as http from 'lib/http';
 
 
@@ -15,12 +13,13 @@ export class ApiError extends http.HttpError {
   }
 }
 
-
-export const trap = () => method => async (...args) => {
+export const trapApiError = () => method => async (...args) => {
   const { response, ...pass } = await method(...args);
   if (!response.ok) throw new ApiError({ response, ...pass });
   return { response, ...pass };
 };
 
 
-export const send = compose(http.trap(), trap(), http.parse())(http.send);
+const send = trapApiError()(http.toDocument()(http.fetch));;
+
+export default { fetch: send };

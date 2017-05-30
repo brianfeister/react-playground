@@ -8,7 +8,7 @@ import { compose } from 'redux';
 import { applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
-import { GENERIC } from 'lib/ACTION_TYPES';
+import { OPERATE } from 'state/GENERIC_TYPES';
 
 
 const set = (state, [path, value]) => _.set(path, value, state);
@@ -27,7 +27,7 @@ const operations = { set, merge, swap, splice };
 const operate = (state, [type, ...args]) => operations[type](state, args);
 
 const reducer = (state={}, { type, steps }) => {
-  return type === GENERIC ? steps.reduce(operate, state) : state;
+  return type === OPERATE ? steps.reduce(operate, state) : state;
 };
 
 

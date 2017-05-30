@@ -48,17 +48,16 @@ export class ParseError extends HttpError {
 
 
 
-
 /* Decorators */
 
-export const trap = () => method => async (...args) => {
+export const trapStatus = () => method => async (...args) => {
   const { response, ...pass } = await method(...args);
   if (!response.ok) throw new StatusError({ response, ...pass });
   return { response, ...pass };
 };
 
 
-export const parse = () => method => async (...args) => {
+export const toDocument = () => method => async (...args) => {
   const { response, ...pass } = await method(...args);
   const document = await response.json().catch(error => {
     throw new ParseError({ response, error, ...pass });
@@ -67,30 +66,19 @@ export const parse = () => method => async (...args) => {
 };
 
 
-export const withJsonBody = document => method => request => {
-  const clone = request.clone();
-  clone.headers.set('content-type', 'application/json');
-  return method(new Request(clone.url, {
-    method: clone.method,
-    headers: clone.headers,
-    body: JSON.stringify(document),
-    mode: clone.mode,
-    credentials: clone.credentials,
-    cache: clone.cache,
-    redirect: clone.redirect,
-    referrer: clone.referrer,
-    integrity: clone.integrity
-  }));
-};
 
+/* Senders */
 
-
-
-/* Fetch */
-
-export const send = async (request) => {
+const send = async (request) => {
   const response = await fetch(request).catch(error => {
     throw new NetworkError({ request, error });
   });
   return { request, response };
-};
+}
+
+
+export { send as fetch };
+
+export default {
+  fetch: send
+}
