@@ -9,9 +9,7 @@ if ( fs.existsSync(devconfigPath) ) {
   devconfig = JSON.parse( fs.readFileSync(devconfigPath) );
 }
 
-if ( devconfig && devconfig.precommitLint ) {
-  console.log('linting staged files precommit ... ' )
-  exec('lint-staged');
-} else {
-  exec('git add');
+if ( devconfig && devconfig.prepushTest ) {
+  console.log('running jest tests prior to push ... ' );
+  exec('jest --coverage');
 }
