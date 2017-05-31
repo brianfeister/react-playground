@@ -6,7 +6,7 @@ import WebpackMd5Hash from 'webpack-md5-hash';
 
 function generateCommonConfig () {
   return {
-    entry: ['./main.js'],
+    entry: ['./src/main.js'],
 
     // All build output is put in client/build. Any asyncronously loaded
     // modules are bundled in chunks and placed there. Those chunks are
@@ -20,12 +20,11 @@ function generateCommonConfig () {
 
     resolve: {
       alias: {
-        exp: path.resolve(__dirname),
-        common: path.resolve(__dirname, 'common'),
-        core: path.resolve(__dirname, 'core'),
-        actions: path.resolve(__dirname, 'actions'),
-        reducers: path.resolve(__dirname, 'reducers'),
-        components: path.resolve(__dirname, 'components')
+        activities: path.resolve(__dirname, 'src', 'activities'),
+        App: path.resolve(__dirname, 'src', 'App'),
+        components: path.resolve(__dirname, 'src', 'components'),
+        lib: path.resolve(__dirname, 'src', 'lib'),
+        state: path.resolve(__dirname, 'src', 'state'),
       }
     },
 
@@ -64,8 +63,7 @@ function generateCommonConfig () {
             plugins: [
               'syntax-dynamic-import',
               'transform-object-rest-spread',
-              'transform-class-properties',
-              'transform-decorators'
+              'transform-class-properties'
             ],
           },
         },
@@ -88,7 +86,7 @@ function generateCommonConfig () {
 
       // Automatically generates HTML file
       new HtmlWebpackPlugin({
-        template: './index.ejs',
+        template: './src/index.ejs',
         alwaysWriteToDisk: true,
       }),
     ],
