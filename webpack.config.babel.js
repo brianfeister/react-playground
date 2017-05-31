@@ -4,7 +4,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 import WebpackMd5Hash from 'webpack-md5-hash';
 
-
 function generateCommonConfig () {
   return {
     entry: ['./main.js'],
