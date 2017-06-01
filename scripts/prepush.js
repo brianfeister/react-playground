@@ -1,7 +1,9 @@
 import fs from 'fs';
-import * as child from 'child_process';
-const exec = child.exec;
+import 'path'
+import child_process from 'child_process';
+import jest from 'jest-cli';
 
+const exec = child_process.execSync;
 const devconfigPath = './.devconfig';
 let devconfig;
 
@@ -11,5 +13,9 @@ if ( fs.existsSync(devconfigPath) ) {
 
 if ( devconfig && devconfig.prepushTest ) {
   console.log('running jest tests prior to push ... ' );
-  exec('jest --coverage');
+  try {
+    exec('npm test', {stdio:'inherit'});
+  } catch (e) {
+    // swallow the ugly node default error this throws, since we only do this in a developer context
+  }
 }

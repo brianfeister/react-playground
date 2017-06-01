@@ -22,6 +22,21 @@ yarn install
 npm start
 ```
 
+# .devconfig
+
+Developers can create an optional `.devconfig` file (JSON formatted). There are two options:
+
+* **precommitLint** - `boolean` - if set to `true`, all staged files are run through `eslint` via the `lint-staged` library prior to each commit
+* **prepushTest** - `boolean` - if set to `true`, `jest` tests are run prior to pushing upstream to catch errors immediately rather than waiting for CI to catch them
+
+`.devconfig`
+```
+{
+  "precommitLint": true,
+  "prepushTest": true
+}
+```
+
 
 # Directory Structure
 

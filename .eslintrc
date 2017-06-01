@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "airbnb"],
   "plugins": ["react"],
   "env": {
     "browser": true,
@@ -39,7 +39,37 @@
     // ignore linebreak style. the CRLF / LF endings wont matter
     // if a windows user correctly converts CRLF to LF upon commits otherwise
     // there are errors every line.
-    "linebreak-style": 0
+    "linebreak-style": 0,
 
+    // babel inserts `'use strict';` for us
+    strict: ['error', 'never'],
+
+    // ensure imports point to files/modules that can be resolved
+    // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-unresolved.md
+    'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
+
+    // require trailing commas in multiline object literals
+    'comma-dangle': ['error', {
+      arrays: 'always-multiline',
+      objects: 'always-multiline',
+      imports: 'always-multiline',
+      exports: 'always-multiline',
+      functions: 'always-multiline',
+    }],
+
+    // disallow unnecessary semicolons
+    'no-extra-semi': 'error',
+
+    // require or disallow use of semicolons instead of ASI
+    semi: ['error', 'always'],
+
+    // disallow use of undeclared variables unless mentioned in a /*global */ block
+    'no-undef': 'error',
+
+    // Require modules with a single export to use a default export
+    // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md
+    'import/prefer-default-export': 'error',
+
+    "indent": [2]
   }
 }

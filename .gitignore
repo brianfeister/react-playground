@@ -35,3 +35,6 @@ npm-debug.log
 
 # Developer config preferences
 .devconfig
+
+# Jest coverage output
+/coverage
