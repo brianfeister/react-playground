@@ -13,7 +13,7 @@ if ( fs.existsSync(devconfigPath) ) {
 
 if ( devconfig && devconfig.precommitLint ) {
   console.log('linting staged files precommit ... ' )
-  exec('babel-node staged')
+  exec('./node_modules/babel-cli/bin/babel-node.js staged')
 } else {
   exec('git add');
 }
